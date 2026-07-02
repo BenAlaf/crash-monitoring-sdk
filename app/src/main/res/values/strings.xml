@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CrashMonitor Demo</string>
+    <string name="status_sdk_version">CrashMonitor SDK v%1$s</string>
+</resources>
