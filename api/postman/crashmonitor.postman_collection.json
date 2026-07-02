@@ -119,6 +119,26 @@
       ]
     },
     {
+      "name": "Sessions (SDK)",
+      "item": [
+        {
+          "name": "Session ping",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{apiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/api/v1/sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"install_id\": \"11111111-1111-1111-1111-111111111111\",\n  \"app\": { \"package_name\": \"com.benalaf.crashmonitor.demo\", \"version_name\": \"1.2.0\", \"version_code\": 12 },\n  \"device\": { \"manufacturer\": \"Samsung\", \"model\": \"SM-G991B\", \"os_version\": \"14\", \"sdk_int\": 34 }\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Issues (admin)",
       "item": [
         {
