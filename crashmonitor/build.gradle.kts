@@ -39,7 +39,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 groupId = "com.benalaf"
                 artifactId = "crashmonitor"
-                version = "0.1.0"
+                version = "0.1.1"
                 artifact(tasks.getByName("bundleReleaseAar"))
                 pom {
                     withXml {

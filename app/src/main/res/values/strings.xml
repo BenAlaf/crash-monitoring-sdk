@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">CrashMonitor Demo</string>
-    <string name="status_sdk_version">CrashMonitor SDK v%1$s</string>
+    <string name="status_placeholder">loading…</string>
+    <string name="status_format">SDK v%1$s | pending reports: %2$d\ninstall id: %3$s</string>
+
+    <string name="section_crashes">Crashes (app will die — reopen to upload)</string>
+    <string name="section_non_fatal">Handled errors (uploaded right away)</string>
+    <string name="section_context">Report context</string>
+
+    <string name="btn_crash_npe">Crash: NullPointerException</string>
+    <string name="btn_crash_state">Crash: IllegalStateException</string>
+    <string name="btn_crash_background">Crash: background thread</string>
+    <string name="btn_non_fatal">Report handled error (logException)</string>
+    <string name="btn_breadcrumb">Add breadcrumb</string>
+    <string name="btn_custom_key">Set custom keys</string>
+    <string name="btn_flush">Flush queue now</string>
 </resources>
