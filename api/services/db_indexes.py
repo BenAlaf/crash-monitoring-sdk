@@ -13,6 +13,7 @@ def ensure_indexes(db):
     db['issues'].create_index([('app_id', 1), ('status', 1), ('event_count', -1)])
 
     db['events'].create_index([('issue_id', 1), ('timestamp', -1)])
+    db['events'].create_index([('app_id', 1), ('timestamp', -1)])
     db['events'].create_index([('app_id', 1), ('received_at', -1)])
     db['events'].create_index([('app_id', 1), ('app_version', 1)])
 

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CrashMonitor — Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23e34948'/></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="topbar" id="topbar" hidden>
+    <span class="brand"><span class="brand-dot"></span> CrashMonitor</span>
+    <nav>
+      <button class="ghost" id="nav-apps">Apps</button>
+      <button class="ghost" id="nav-logout">Log out</button>
+    </nav>
+  </header>
+
+  <main id="view"></main>
+
+  <script src="app.js"></script>
+</body>
+</html>
