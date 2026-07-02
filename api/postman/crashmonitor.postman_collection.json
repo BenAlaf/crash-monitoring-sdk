@@ -1,0 +1,183 @@
+{
+  "info": {
+    "name": "CrashMonitor API",
+    "description": "Crash & error monitoring backend. Set the collection variables first: baseUrl (local http://localhost:8082 or the Vercel URL), adminKey (ADMIN_KEY env value), apiKey (from POST /api/v1/apps), appId, issueId.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8082" },
+    { "key": "adminKey", "value": "" },
+    { "key": "apiKey", "value": "" },
+    { "key": "appId", "value": "" },
+    { "key": "issueId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Apps (admin)",
+      "item": [
+        {
+          "name": "Create app",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Admin-Key", "value": "{{adminKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/api/v1/apps",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"CrashMonitor Demo\",\n  \"package_name\": \"com.benalaf.crashmonitor.demo\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List apps",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "X-Admin-Key", "value": "{{adminKey}}" } ],
+            "url": "{{baseUrl}}/api/v1/apps"
+          }
+        },
+        {
+          "name": "Get app",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "X-Admin-Key", "value": "{{adminKey}}" } ],
+            "url": "{{baseUrl}}/api/v1/apps/{{appId}}"
+          }
+        },
+        {
+          "name": "Update app (rename)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "X-Admin-Key", "value": "{{adminKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/api/v1/apps/{{appId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"CrashMonitor Demo (renamed)\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete app (cascade)",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "X-Admin-Key", "value": "{{adminKey}}" } ],
+            "url": "{{baseUrl}}/api/v1/apps/{{appId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crashes (SDK)",
+      "item": [
+        {
+          "name": "Ingest crash report",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{apiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/api/v1/crashes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"install_id\": \"11111111-1111-1111-1111-111111111111\",\n  \"timestamp\": \"2026-07-02T14:03:22.123Z\",\n  \"is_fatal\": true,\n  \"app\": {\n    \"package_name\": \"com.benalaf.crashmonitor.demo\",\n    \"version_name\": \"1.2.0\",\n    \"version_code\": 12\n  },\n  \"device\": {\n    \"manufacturer\": \"Samsung\",\n    \"model\": \"SM-G991B\",\n    \"os_version\": \"14\",\n    \"sdk_int\": 34\n  },\n  \"thread\": \"main\",\n  \"exception\": {\n    \"type\": \"java.lang.IllegalStateException\",\n    \"message\": \"fragment not attached\",\n    \"frames\": [\n      { \"cls\": \"com.benalaf.crashmonitor.demo.MainActivity\", \"method\": \"onClick\", \"file\": \"MainActivity.kt\", \"line\": 42 }\n    ],\n    \"cause\": null\n  },\n  \"raw_stack_trace\": \"java.lang.IllegalStateException: fragment not attached\\n\\tat com.benalaf.crashmonitor.demo.MainActivity.onClick(MainActivity.kt:42)\",\n  \"breadcrumbs\": [ { \"ts\": \"2026-07-02T14:03:20.000Z\", \"message\": \"clicked checkout\" } ],\n  \"custom\": { \"cart_size\": \"3\" }\n}"
+            }
+          }
+        },
+        {
+          "name": "Ingest batch (array)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{apiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/api/v1/crashes",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"install_id\": \"22222222-2222-2222-2222-222222222222\",\n    \"timestamp\": \"2026-07-02T15:00:00Z\",\n    \"is_fatal\": false,\n    \"app\": { \"package_name\": \"com.benalaf.crashmonitor.demo\", \"version_name\": \"1.2.0\" },\n    \"exception\": {\n      \"type\": \"java.io.IOException\",\n      \"message\": \"timeout\",\n      \"frames\": [ { \"cls\": \"com.benalaf.crashmonitor.demo.SyncService\", \"method\": \"pull\" } ]\n    }\n  },\n  {\n    \"install_id\": \"22222222-2222-2222-2222-222222222222\",\n    \"timestamp\": \"2026-07-02T15:01:00Z\",\n    \"app\": { \"package_name\": \"com.benalaf.crashmonitor.demo\", \"version_name\": \"1.2.0\" },\n    \"exception\": {\n      \"type\": \"java.lang.NullPointerException\",\n      \"message\": \"null user\",\n      \"frames\": [ { \"cls\": \"com.benalaf.crashmonitor.demo.ProfileActivity\", \"method\": \"renderUser\" } ]\n    }\n  }\n]"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Issues (admin)",
+      "item": [
+        {
+          "name": "List issues for app",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "X-Admin-Key", "value": "{{adminKey}}" } ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/apps/{{appId}}/issues?sort=last_seen&page=1&limit=20",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "apps", "{{appId}}", "issues" ],
+              "query": [
+                { "key": "sort", "value": "last_seen" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get issue",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "X-Admin-Key", "value": "{{adminKey}}" } ],
+            "url": "{{baseUrl}}/api/v1/issues/{{issueId}}"
+          }
+        },
+        {
+          "name": "List issue events",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "X-Admin-Key", "value": "{{adminKey}}" } ],
+            "url": "{{baseUrl}}/api/v1/issues/{{issueId}}/events"
+          }
+        },
+        {
+          "name": "Update issue status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "X-Admin-Key", "value": "{{adminKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/api/v1/issues/{{issueId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"resolved\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete issue",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "X-Admin-Key", "value": "{{adminKey}}" } ],
+            "url": "{{baseUrl}}/api/v1/issues/{{issueId}}"
+          }
+        }
+      ]
+    }
+  ]
+}
