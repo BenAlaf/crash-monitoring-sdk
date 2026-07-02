@@ -2,6 +2,7 @@ package com.benalaf.crashmonitor.internal
 
 import com.benalaf.crashmonitor.model.CrashReport
 import com.benalaf.crashmonitor.model.IngestResult
+import com.benalaf.crashmonitor.model.SessionPing
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -14,4 +15,10 @@ internal interface CrashApi {
         @Header("X-API-Key") apiKey: String,
         @Body reports: List<CrashReport>,
     ): Call<List<IngestResult>>
+
+    @POST("api/v1/sessions")
+    fun postSession(
+        @Header("X-API-Key") apiKey: String,
+        @Body session: SessionPing,
+    ): Call<Void>
 }

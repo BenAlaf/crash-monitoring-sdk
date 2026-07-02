@@ -52,6 +52,17 @@ def stats_overview(app_id):
     now = datetime.now(timezone.utc)
     base = {'app_id': app_id}
 
+    # crash-free users, last 30 days:
+    # 1 - distinct(users with a fatal event) / distinct(users with a session)
+    window = now - timedelta(days=30)
+    session_users = len(db['sessions'].distinct(
+        'install_id', {**base, 'received_at': {'$gte': window}}
+    ))
+    crashed_users = len(db['events'].distinct(
+        'install_id', {**base, 'is_fatal': True, 'timestamp': {'$gte': window}}
+    ))
+    crash_free = None if session_users == 0 else max(0.0, 1 - crashed_users / session_users)
+
     return jsonify({
         'total_events': db['events'].count_documents(base),
         'fatal_events': db['events'].count_documents({**base, 'is_fatal': True}),
@@ -60,6 +71,8 @@ def stats_overview(app_id):
         'affected_users': len(db['events'].distinct('install_id', base)),
         'events_24h': db['events'].count_documents({**base, 'timestamp': {'$gte': now - timedelta(hours=24)}}),
         'events_7d': db['events'].count_documents({**base, 'timestamp': {'$gte': now - timedelta(days=7)}}),
+        'session_users_30d': session_users,
+        'crash_free_users_30d': crash_free,
     }), 200
 
 

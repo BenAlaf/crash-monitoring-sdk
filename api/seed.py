@@ -132,9 +132,32 @@ def fake_report(install_ids):
     }
 
 
+def fake_sessions(db, app_doc, install_ids, count):
+    """Direct inserts — sessions have no grouping logic, so no ingest path needed."""
+    docs = []
+    for _ in range(count):
+        manufacturer, model, os_version, sdk_int = random.choice(DEVICES)
+        days_back = random.betavariate(1.2, 3.0) * 30
+        ts = datetime.now(timezone.utc) - timedelta(days=days_back, minutes=random.randint(0, 1440))
+        docs.append({
+            '_id': str(uuid.uuid4()),
+            'app_id': app_doc['_id'],
+            'install_id': random.choice(install_ids),
+            'received_at': ts,
+            'app_version': random.choices(APP_VERSIONS, weights=[1, 3, 6])[0],
+            'version_code': 1,
+            'os_version': os_version,
+            'sdk_int': sdk_int,
+            'device_manufacturer': manufacturer,
+            'device_model': model,
+        })
+    db['sessions'].insert_many(docs)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--events', type=int, default=300)
+    parser.add_argument('--sessions', type=int, default=1200)
     args = parser.parse_args()
 
     db = MongoConnectionHolder.get_db()
@@ -149,6 +172,14 @@ def main():
         process_report(db, app_doc, fake_report(install_ids))
         if (i + 1) % 50 == 0:
             print(f"  {i + 1}/{args.events} events ingested")
+
+    # sessions come from a wider population: users who actually crashed (from the
+    # events collection, so this also works on a sessions-only rerun) PLUS healthy
+    # ones — the crash-free-users percentage needs a real denominator
+    crash_users = db['events'].distinct('install_id', {'app_id': app_doc['_id']}) or install_ids
+    session_population = list(crash_users) + [str(uuid.uuid4()) for _ in range(150)]
+    fake_sessions(db, app_doc, session_population, args.sessions)
+    print(f"  {args.sessions} sessions inserted ({len(session_population)} user pool)")
 
     issues = list(db['issues'].find({'app_id': app_doc['_id']}))
     print(f"\nDone: {args.events} events across {len(issues)} issues:")

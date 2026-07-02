@@ -54,3 +54,10 @@ data class IngestResult(
     @SerializedName("issue_id") val issueId: String,
     @SerializedName("fingerprint") val fingerprint: String,
 )
+
+data class SessionPing(
+    @SerializedName("install_id") val installId: String,
+    @SerializedName("timestamp") val timestamp: String,
+    @SerializedName("app") val app: AppInfo,
+    @SerializedName("device") val device: DeviceInfo,
+)

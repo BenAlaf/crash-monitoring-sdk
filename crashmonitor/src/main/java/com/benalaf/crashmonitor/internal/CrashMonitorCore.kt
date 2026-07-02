@@ -3,6 +3,7 @@ package com.benalaf.crashmonitor.internal
 import android.content.Context
 import com.benalaf.crashmonitor.CrashMonitorConfig
 import com.benalaf.crashmonitor.model.Breadcrumb
+import com.benalaf.crashmonitor.model.SessionPing
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,7 +23,8 @@ internal class CrashMonitorCore(context: Context, config: CrashMonitorConfig) {
         directory = File(appContext.filesDir, QUEUE_DIR),
         maxPendingReports = config.maxPendingReports,
     )
-    private val factory = ReportFactory(Snapshot.from(appContext), installId)
+    private val snapshot = Snapshot.from(appContext)
+    private val factory = ReportFactory(snapshot, installId)
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(config.baseUrl)
@@ -33,13 +35,19 @@ internal class CrashMonitorCore(context: Context, config: CrashMonitorConfig) {
     private val breadcrumbs = ArrayDeque<Breadcrumb>()
     private val customKeys = ConcurrentHashMap<String, String>()
 
-    /** Installs the crash handler (idempotent) and drains reports left by previous runs. */
+    /**
+     * Installs the crash handler (idempotent), drains reports left by previous
+     * runs, and fires the session ping that powers the crash-free-users metric.
+     */
     fun start() {
         val previous = Thread.getDefaultUncaughtExceptionHandler()
         if (previous !is CrashHandler) {
             Thread.setDefaultUncaughtExceptionHandler(CrashHandler(previous, ::onUncaughtException))
         }
         uploader.requestDrain()
+        uploader.sendSessionPing(
+            SessionPing(installId, Instant.now().toString(), snapshot.app, snapshot.device)
+        )
     }
 
     private fun onUncaughtException(thread: Thread, throwable: Throwable) {

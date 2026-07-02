@@ -1,6 +1,7 @@
 package com.benalaf.crashmonitor.internal
 
 import android.util.Log
+import com.benalaf.crashmonitor.model.SessionPing
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -24,6 +25,17 @@ internal class Uploader(
 
     fun requestDrain() {
         executor.execute { drain() }
+    }
+
+    /** Sessions are statistics, not evidence: a failed ping is dropped, never queued. */
+    fun sendSessionPing(ping: SessionPing) {
+        executor.execute {
+            try {
+                api.postSession(apiKey, ping).execute()
+            } catch (e: Exception) {
+                Log.d(TAG, "Session ping failed (offline?): ${e.message}")
+            }
+        }
     }
 
     private fun drain() {

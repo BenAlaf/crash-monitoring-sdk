@@ -414,6 +414,13 @@ async function dashboardView(appId) {
       </div>
 
       <div class="kpi-row">
+        <div class="card tile"><div class="label">Crash-free users</div><div class="value">${
+          overview.crash_free_users_30d == null ? '—' : (overview.crash_free_users_30d * 100).toFixed(1) + '%'
+        }</div><div class="hint">${
+          overview.crash_free_users_30d == null
+            ? 'no session data yet'
+            : `last 30 d · ${compact(overview.session_users_30d)} session users`
+        }</div></div>
         <div class="card tile"><div class="label">Total events</div><div class="value">${compact(overview.total_events)}</div><div class="hint">${compact(overview.fatal_events)} fatal</div></div>
         <div class="card tile"><div class="label">Open issues</div><div class="value">${compact(overview.open_issues)}</div><div class="hint">of ${compact(overview.total_issues)} total</div></div>
         <div class="card tile"><div class="label">Affected users</div><div class="value">${compact(overview.affected_users)}</div><div class="hint">distinct installs</div></div>
