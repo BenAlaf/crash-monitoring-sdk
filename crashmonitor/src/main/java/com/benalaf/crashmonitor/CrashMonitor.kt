@@ -22,7 +22,7 @@ import com.benalaf.crashmonitor.internal.CrashMonitorCore
  */
 object CrashMonitor {
 
-    const val SDK_VERSION: String = "0.2.0"
+    const val SDK_VERSION: String = "1.0.0"
 
     private const val TAG = "CrashMonitor"
 

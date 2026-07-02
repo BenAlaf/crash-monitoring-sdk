@@ -95,7 +95,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.BenAlaf:crash-monitoring-sdk:0.2.0")
+    implementation("com.github.BenAlaf:crash-monitoring-sdk:1.0.0")
 }
 ```
 
