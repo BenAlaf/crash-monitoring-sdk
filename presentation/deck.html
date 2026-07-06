@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrashMonitor — Presentation</title>
+<style>
+  :root {
+    --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e;
+    --muted:#898781; --border:rgba(11,11,11,0.10);
+    --blue:#2a78d6; --bluewash:rgba(42,120,214,0.10);
+    --red:#e34948; --redwash:rgba(227,73,72,0.10);
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { font-family: system-ui,-apple-system,"Segoe UI",sans-serif; background:#000; overflow:hidden; }
+  .slide { position:fixed; inset:0; background:var(--page); display:none;
+           flex-direction:column; align-items:center; justify-content:center; }
+  .slide.active { display:flex; }
+  .dot { width:42px; height:42px; border-radius:50%; background:var(--red);
+         box-shadow:0 0 0 12px var(--redwash); }
+  .brandrow { display:flex; align-items:center; gap:26px; }
+  .wordmark { font-size:92px; font-weight:700; letter-spacing:-0.03em; color:var(--ink); }
+  .tagline { font-size:34px; color:var(--ink2); font-weight:600; margin-top:14px; }
+  .chips { display:flex; gap:18px; margin-top:64px; }
+  .chip { background:var(--surface); border:1px solid var(--border); border-radius:16px;
+          padding:20px 30px; font-size:24px; font-weight:600; color:var(--ink2);
+          box-shadow:0 10px 30px rgba(11,11,11,0.06); }
+  .chip b { color:var(--ink); display:block; font-size:27px; margin-bottom:4px; }
+  .problem { font-size:26px; color:var(--muted); margin-top:56px; max-width:900px; text-align:center; line-height:1.5; }
+  .problem b { color:var(--red); }
+  video { width:100vw; height:100vh; object-fit:contain; background:#000; }
+  .code { font-family:ui-monospace,Menlo,monospace; font-size:26px; color:#e8e6df;
+          background:#1a1a19; border-radius:14px; padding:20px 34px; }
+  .links { display:flex; flex-direction:column; gap:14px; align-items:center; margin-top:44px; }
+  .link { font-family:ui-monospace,Menlo,monospace; font-size:23px; color:var(--ink2);
+          background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 24px; }
+  .link.primary { color:var(--blue); }
+  .qr { width:220px; height:220px; border-radius:16px; border:1px solid var(--border); margin-top:44px; }
+  .hint { position:fixed; bottom:16px; right:22px; font-size:14px; color:var(--muted); opacity:0.6; }
+  .closehead { font-size:56px; font-weight:700; color:var(--ink); margin-bottom:36px; letter-spacing:-0.02em; }
+</style>
+</head>
+<body>
+
+<section class="slide active" id="s1">
+  <div class="brandrow"><div class="dot"></div><div class="wordmark">CrashMonitor</div></div>
+  <div class="tagline">Crash &amp; error monitoring for Android</div>
+  <div class="chips">
+    <div class="chip"><b>Crash-proof capture</b>saved to disk before the process dies</div>
+    <div class="chip"><b>One bug = one issue</b>fingerprint grouping, server-side</div>
+    <div class="chip"><b>Crash-free users %</b>the metric that matters</div>
+  </div>
+  <div class="problem">Your app crashes on a user's phone — <b>you find out from a 1-star review.</b><br>
+  CrashMonitor finds out first. Live in production: SDK on JitPack, API on Vercel, MongoDB Atlas.</div>
+</section>
+
+<section class="slide" id="s2">
+  <video id="promo" src="crashmonitor-promo.mp4" preload="auto"></video>
+</section>
+
+<section class="slide" id="s3">
+  <div class="closehead">Get it in two minutes</div>
+  <div class="code">implementation("com.github.BenAlaf:crash-monitoring-sdk:1.0.0")</div>
+  <img class="qr" alt="GitHub QR" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQAAAABWN2yYAAAC/ElEQVR4nO1cW4rkMAyUw/47N5j7H2tuEJ9Agx6W5XR/zEyLZZutIjTBD5oUhWTJlhvTzzGOX0wiwqwMsJFx0GgBGvoY9F1wUjtpGwYON0BRNWyw4dKGzq7Gzu1DmqVRxZmGgfkMsPE6G3/kZ5wiMxIRNn1p+rDJT17ObRiY3wAdVrMxmllFMYOd/UVtY/1/fReY9d/Yw0AXe+gKHM3FJ5765Df7rgOz3k+HfamMx6lSvMw1kzlo61vD/v3vOjDr7dhohnPGIxfxpzho8dHTU2/D3uS7fo7jF3MIs0rsYb9nENt00K1z65yd9Wv/dWBWAtjY4HbPZDZjE2uRLsvb2LAIXi5wmAE2XmeDXF36uOpcbHOEdU2tqm7BfAbYqNOhYhlAM4bzcaEuiYL5DLBREy/zaJKp7tMC6outD114ltPWIBp57AdAhxX28PINOzLbOBtjobj2+2APnwM6rGCjs51kYGY5wxA+mqVdDGPsMnfmTxsA5jPARoVfHr5X0qZHjgSNbTQLxqm+O1QK5jPARk2cYqAZNYcL3tqn15YmxCkboMOa9SFFZoZcfi7CfXGYFo1gPgNsFNnDy7M3nI/ZRDoxRq4UIpjPABt18fL1JFvoLSHUNRjMZ4CN4vWhYeue/lo6lmLBfAbYKPPLBn44BLvkt227gPkMsFEUp9AKVdhOOKTdvdVlNhP28A7osM4vX/6+9k3ioFfO5Ngw2MMN0GHpOYeeFofz+M0tQoE9fAbosChevu55Qo4FYeQVbbBrEsxngI3KeFmQszT7KtHap5EE8xlgo2Z/mW4byl2rmONiB2vUbejptsF8BtgoOn9IiuGCzAlEjopRddkmTQbzG6DDIjaG3VpDtiCUM2BRo/ehdfRWrKftuFfkAdBhdR39OKVQdFbQxwUjfkJ7FTWD+QywUa1D0gp6LRf1NaGWDPB2uQ2YvwE6rL7PoXOzUno1iRGoSNiiXSZIrA93QId1+3qKnEjM+335OCLyNg+ADl9no+E+2AQoKuNvsvEFst9sHNoxJxIAAAAASUVORK5CYII=">
+  <div class="links">
+    <div class="link primary">github.com/BenAlaf/crash-monitoring-sdk</div>
+    <div class="link">portal: crash-monitoring-sdk.vercel.app/portal</div>
+    <div class="link">docs: benalaf.github.io/crash-monitoring-sdk</div>
+  </div>
+</section>
+
+<div class="hint">→ next · ← back · space plays video · F fullscreen</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const video = document.getElementById('promo');
+  let current = 0;
+
+  function show(i) {
+    current = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, j) => s.classList.toggle('active', j === current));
+    if (slides[current].id !== 's2') video.pause();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') show(current + 1);
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(current - 1);
+    else if (e.key === ' ') {
+      e.preventDefault();
+      if (slides[current].id === 's2') video.paused ? video.play() : video.pause();
+    } else if (e.key.toLowerCase() === 'f') {
+      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    }
+  });
+  document.addEventListener('click', () => {
+    if (slides[current].id === 's2') video.paused ? video.play() : video.pause();
+  });
+  video.addEventListener('ended', () => show(current + 1));
+</script>
+</body>
+</html>
