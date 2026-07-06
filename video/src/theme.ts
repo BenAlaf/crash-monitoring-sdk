@@ -23,4 +23,4 @@ export const MONO =
   'ui-monospace, "SF Mono", Menlo, monospace';
 
 // Drop a royalty-free track at video/public/music.mp3 and flip this to true.
-export const MUSIC_ENABLED = false;
+export const MUSIC_ENABLED = true;
